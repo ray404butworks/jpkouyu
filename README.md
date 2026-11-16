@@ -1,285 +1,83 @@
-# jpkouyu 日语口语练习台
+# 日语私教 · Japanese Immersion Coach
 
-jpkouyu 是一个面向中文使用者的日语口语陪练 Skill。它会先帮你准备场景词汇和句型，再进行日语角色扮演；练习结束后整理真实表达、纠正内容和下次重点，并保存到本地复习台。
+**把“看选项会做”练成“换个场景也会说”。**
 
-![jpkouyu 本地复习台](docs/screenshots/workbench.png)
+面向中文使用者的 N1 中日双语沉浸式日语私教 Skill。通过情景交流理解词汇与语法，在真实表达中纠错，再按第 1／3／7 天复习。日常陪练保持自然交流，考试模式保留 JLPT 训练。
 
-## 能做什么
+仓库继续使用 **jpkouyu**，新版技能名为 **japanese-immersion-coach**。这是第一阶段的可迁移文件版：教学指令、Project 指令和本地课程记录工具；语音交互取决于当前客户端。
 
-- 练习便利店、餐厅、咖啡店、车站、酒店、理发店、购物、旅行、朋友聊天、面试和工作沟通等真实场景。
-- 支持零基础、入门、中级、进阶四种程度。
-- 支持 5、10、20、40 分钟训练，也可以指定其他时长。
-- 提供沉浸式、引导式、学习式三种中文辅助强度。
-- 为生词和关键句标注假名；假名不熟时可以临时使用罗马音辅助。
-- 根据角色区分です／ます体、普通体和商务敬语。
-- 优先纠正影响理解、反复出现或与本课目标直接相关的问题。
-- 区分独立表达、中文提示后表达、关键词提示后表达和模仿表达。
-- 自动生成练习报告，并把记录保存到本地复习台。
-- 每天展示一句日语小说节选，附中文译意、读音、语境、口头小练习和原文链接。
+## 直接开始
 
-仅在能够听到原始音频时分析长音、促音、清浊音和节奏。纯文字或语音转写可以检查用词与语法，但不会被当成真实发音证据。
-
-## 怎么使用
-
-### 1. 开始一次练习
-
-直接在 Codex 中发送：
+安装后，在支持本地 Skill 的环境中发送：
 
 ~~~text
-使用 $jpkouyu 帮我做一次 10 分钟的日语口语训练。
-主题：便利店结账
-程度：入门
-辅助：中文引导，汉字标假名
+使用 $japanese-immersion-coach 开始今天的日语陪练，先试 10 分钟。
 ~~~
 
-也可以只说：
-
-~~~text
-使用 $jpkouyu 练习日语。
-~~~
-
-信息不足时，Skill 会帮你确定主题、时长、程度和辅助方式。默认设置为 10 分钟、入门、引导式、汉字标注假名、です／ます体。
-
-### 2. 查看预习卡
-
-正式对话前会出现：
-
-- 场景、双方角色和本次任务；
-- 需要识别的日语词汇；
-- 常用短语和完整句型；
-- 可能遇到的问题；
-- 本次练习的小目标。
-
-说 **「准备好了」** 或 **「準備できました」** 后开始角色扮演。
-
-### 3. 进行角色扮演
-
-Skill 会扮演店员、服务人员、同事或朋友。你使用日语回答；卡住时可以说“给我一点提示”“给我关键词”或“给我完整示范”。
-
-| 模式 | 适合情况 | 提示方式 |
-|---|---|---|
-| 沉浸式 | 想模拟真实交流 | 优先使用日语，卡住时才给提示 |
-| 引导式 | 大多数练习 | 在关键位置给中文表达方向 |
-| 学习式 | 初次接触场景 | 更早提供中文方向和日语关键词 |
-
-### 4. 结束并查看报告
-
-想结束练习并查看报告时，说：
-
-~~~text
-结束练习
-~~~
-
-也可以说：
-
-~~~text
-練習を終わりにします
-~~~
-
-Skill 会立即退出角色扮演，生成本次报告并保存到复习台。报告包括任务完成情况、真实原句、自然改法、掌握状态、下次重点和迁移练习。
-
-## 安装环境配置
-
-### 运行要求
-
-- Windows、macOS 或 Linux；
-- 支持加载本地 Skill 并执行本地脚本的 Codex；
-- Python 3.10 或更高版本；
-- 浏览器，用于查看本地复习台。
-
-核心功能只使用 Python 标准库，不需要安装 pip 依赖、Node.js 或 API Key。语音练习还需要当前客户端支持语音输入；文字练习不受影响。
-
-### 1. 确认 Codex 技能目录
-
-jpkouyu 不要求使用 G 盘，也不要求修改 `CODEX_HOME`。按照 OpenAI 当前的 Codex Skill 目录规则，个人技能推荐放在：
-
-| 系统 | 个人技能目录 |
+| 你说 | 私教会做什么 |
 |---|---|
-| Windows | `%USERPROFILE%\.agents\skills` |
-| macOS / Linux | `$HOME/.agents/skills` |
+| 开始今天的日语陪练 | 自然聊天、情景词汇、语法互动、角色扮演、旧知识复现 |
+| 我们用日语随便聊聊 | 围绕兴趣交流，自然穿插 N1 表达 |
+| 复习我之前做错的题 | 从实际提供的错题讲清含义，再换新情境使用 |
+| 切换 N1 考试模式 | 词汇、语法、读解或听力训练，按实际作答批改 |
+| 中国語で説明して | 用简短中文说明，再接回日语 |
+| 今天先到这里 | 立即收课，整理状态、原句、纠错和待复习项 |
 
-Windows PowerShell 创建目录：
+默认一课 35–45 分钟，重点 5–8 个词、2–3 条语法；按理解程度调整。只练 10 分钟时减少内容。教学不会每句机械翻译，也不会把聊天变成选择题连考。
 
-~~~powershell
-$skillRoot = Join-Path $HOME '.agents\skills'
-New-Item -ItemType Directory -Force -Path $skillRoot | Out-Null
-~~~
+## 两种使用方式
 
-macOS / Linux 创建目录：
+### 本地 Skill
 
-~~~bash
-mkdir -p "$HOME/.agents/skills"
-~~~
+需要支持本地 Skill 的客户端；课程归档工具需要 Python 3.10+，仅使用标准库。
 
-如果你已经通过 `$skill-installer` 安装技能，或为 Codex 配置了其他技能目录，请继续使用现有目录，无需迁移。
-
-### 2. 安装技能
-
-将完整的 `jpkouyu` 文件夹放入个人技能目录。安装后的关键文件应位于：
-
-~~~text
-Windows：%USERPROFILE%\.agents\skills\jpkouyu\SKILL.md
-macOS / Linux：$HOME/.agents/skills/jpkouyu/SKILL.md
-~~~
-
-安装后的目录结构应类似：
-
-~~~text
-jpkouyu/
-├── SKILL.md
-├── agents/
-├── assets/
-├── curriculum/
-├── references/
-├── scripts/
-└── README.md
-~~~
-
-如果拿到的是 `jpkouyu.zip`，Windows PowerShell 可以执行：
+将本仓库完整内容放进你的技能目录，文件夹命名为 japanese-immersion-coach。继续使用客户端已配置的技能目录即可。例如，在已有的 CODEX_HOME/skills 下克隆：
 
 ~~~powershell
-$skillRoot = Join-Path $HOME '.agents\skills'
-New-Item -ItemType Directory -Force -Path $skillRoot | Out-Null
-Expand-Archive -LiteralPath '.\jpkouyu.zip' -DestinationPath $skillRoot
+$jpSkillDir = Join-Path $env:CODEX_HOME 'skills\japanese-immersion-coach'
+git clone https://github.com/ray404butworks/jpkouyu.git $jpSkillDir
 ~~~
 
-不要让目录变成 `skills/jpkouyu/jpkouyu/SKILL.md`。正确位置应是 `skills/jpkouyu/SKILL.md`。
+仅在 CODEX_HOME 已设置时使用上例；也可以从 GitHub 下载 ZIP 后解压到已配置的技能目录。最终路径应是 japanese-immersion-coach/SKILL.md，避免多嵌套一层。重新打开客户端或新建聊天，确认技能可见。
 
-### 3. 检查 Python 和技能位置
+原来安装为 jpkouyu 的用户应在备份后换成新版文件夹；已有课程数据保留在原处，避免同时启用两个重复教学入口。本次仓库升级不会自动修改你本机已安装的技能。
+
+### ChatGPT Project
+
+复制 [项目指令](docs/PROJECT-INSTRUCTIONS.md) 到项目设置中的指令。将你愿意使用的学习画像、真实错题和最近课程总结添加为项目来源，然后在项目新聊天中说「开始今天的日语陪练」。支持语音的客户端可自行开启语音。
+
+结束后把文字总结保存到项目来源；下次先确认教练读到了上次记录。若未读到，粘贴上次总结继续。粘贴项目指令不等于安装原生 Skill，也不保证语音转录或跨会话记录自动持久化。
+
+## 教学与复习
+
+- 情景输入 → 理解 → 交流 → 主动表达 → 纠错 → 间隔复现 → 考试迁移。
+- 六种知识状态：未学习、已接触但不理解、被动理解、提示后使用、独立使用、需要重新巩固。
+- 首次接触后第 1／3／7 天换语境复现；遗忘后安排次日再试，错过的复习不一次堆满。
+- 选择题答对、跟读和即时模仿不会直接升级为独立使用。没有机会表达时标记未观察。
+- 只有听到原始音频才能判断发音。转写内容不能证明音调、长音、促音或真实听辨表现。
+
+见 [教学规则](references/teaching-method.md)、[复习策略](references/review-policy.md)、[模拟课程](examples/immersion-demo.md)。公开版不含个人成绩、错题账本、考试日期或私人学习画像。请在本地填写 [画像模板](references/learner-profile.md)。
+
+## 本地保存与恢复
+
+新版采用独立 JSON 课程文件，不需要数据库、网站或外部 API。明确指定一个私有数据目录，并在所有命令中保持一致：
 
 ~~~powershell
-python --version
-Test-Path (Join-Path $HOME '.agents\skills\jpkouyu\SKILL.md')
+$jpData = 'G:\AI\OpenAI\Workspaces\japanese-immersion-coach-data'
+python scripts/coach.py archive --data-dir $jpData --input '课程记录.json'
+python scripts/coach.py due --data-dir $jpData --on 2026-11-17
 ~~~
 
-Python 应显示 3.10 或更高版本，第二条命令应返回 True。如果系统使用 py 启动器，也可以将后续命令中的 python 替换为 py -3。
+其他系统换成自己的可写绝对路径；--on 使用实际复习日期，省略时取电脑本地日期。输入格式和证据要求见 [课程记录规范](references/session-schema.md)。命令应在技能目录运行，或使用脚本的绝对路径。
 
-安装完成后重新打开 Codex 或新建会话，让技能列表重新载入。
+同 ID、同内容重复保存不重复记课；同 ID 不同内容拒绝覆盖。due 只读取记录，给出知识点、当前状态、到期日期和复习轮次，不擅自修改成绩。不会推送通知，也不会自动监听语音。
 
-## 本地复习台
+## 旧版兼容
 
-### 会保存什么
+原场景预习卡、复习台、每日小说一句及其脚本完整保留，见 [旧版使用说明](docs/legacy-workbench.md)。旧记录仍用原 workbench.py 和原数据目录读取；新版六级状态与间隔复习使用 coach.py 和独立目录。此次不迁移、不覆盖旧历史。
 
-每次完整练习结束后，本地复习台会保存：
+## 验证边界
 
-- 主题、时长、程度、辅助模式和任务完成情况；
-- 本次练习的目标表达及假名读音；
-- 每个表达的掌握状态和使用证据；
-- 你的真实原句、自然改法和中文说明；
-- 最多三个下次重点；
-- 一个 2–5 分钟的迁移练习。
+本仓库提供可检查的教学规范和可运行的本地记录工具。本地自动检查可验证数据保存、幂等、证据约束和复习日期；不能证明手机语音里的中日切换、原生 Skill 自动调用或 Project 自动找到旧记录。这些仍需在实际客户端体验后验收。
 
-“已掌握”只用于本次独立且正确的表达。看过示范或照着模仿不会直接算作掌握。没有实际练到的目标会标记为“未观察”。
-
-### 启动复习台
-
-Windows PowerShell 中执行：
-
-~~~powershell
-$skillDir = Join-Path $HOME '.agents\skills\jpkouyu'
-$dataDir = Join-Path $HOME 'jpkouyu-data'
-python (Join-Path $skillDir 'scripts\workbench.py') serve --data-dir $dataDir
-~~~
-
-macOS / Linux 终端中执行：
-
-~~~bash
-python3 "$HOME/.agents/skills/jpkouyu/scripts/workbench.py" serve \
-  --data-dir "$HOME/jpkouyu-data"
-~~~
-
-浏览器通常会自动打开：
-
-~~~text
-http://127.0.0.1:8766/
-~~~
-
-保持终端运行，复习台就会持续可访问；按 Ctrl+C 停止服务。关闭服务不会删除已经保存的练习记录。
-
-### 数据保存位置
-
-上面的通用命令会把数据保存在当前用户主目录：
-
-~~~text
-Windows：%USERPROFILE%\jpkouyu-data
-macOS / Linux：$HOME/jpkouyu-data
-~~~
-
-其中包含：
-
-~~~text
-jpkouyu-data/
-├── sessions/             每次练习的独立记录
-├── workbench-data.json   复习台汇总数据
-└── 复习台.md             自动生成的文字版复习记录
-~~~
-
-记录只保存在本机。备份时复制整个 jpkouyu-data 文件夹即可。
-
-### 使用自定义数据目录
-
-init、archive 和 serve 必须使用同一个数据目录。例如：
-
-~~~powershell
-$jpData = 'D:\Japanese\jpkouyu-data'
-$skillDir = Join-Path $HOME '.agents\skills\jpkouyu'
-
-python (Join-Path $skillDir 'scripts\workbench.py') init --data-dir $jpData
-python (Join-Path $skillDir 'scripts\workbench.py') serve --data-dir $jpData
-~~~
-
-`init`、`archive` 和 `serve` 必须使用同一个数据目录。数据目录应使用可写的绝对路径。
-
-### 每日小说一句
-
-复习台内置 14 条日语小说短句，按电脑本地日期每天轮换。同一天刷新页面时内容保持一致；页面跨过本地午夜、电脑休眠恢复或系统日期发生变化后，会自动检查并更新。
-
-每日短句包含：
-
-- 日语原文和中文学习译意；
-- 假名读音；
-- 原句所在语境；
-- 一个可以马上开口的小练习；
-- 作者、作品名和原文页面链接。
-
-每日短句用于阅读和开口热身，不会计入真实练习的掌握度。
-
-## 常见问题
-
-### Codex 找不到 $jpkouyu
-
-确认文件存在：
-
-~~~powershell
-Test-Path (Join-Path $HOME '.agents\skills\jpkouyu\SKILL.md')
-~~~
-
-然后重新打开 Codex 或新建会话。
-
-### 提示找不到 python
-
-安装 Python 3.10 或更高版本，并在安装时启用“Add Python to PATH”。也可以尝试把命令中的 python 改成 py -3。
-
-### 8766 端口被占用
-
-改用其他端口：
-
-~~~powershell
-$skillDir = Join-Path $HOME '.agents\skills\jpkouyu'
-$dataDir = Join-Path $HOME 'jpkouyu-data'
-python (Join-Path $skillDir 'scripts\workbench.py') serve --data-dir $dataDir --port 8767
-~~~
-
-然后打开终端显示的新地址。
-
-### 浏览器没有自动打开
-
-手动访问 http://127.0.0.1:8766/。也可以在启动命令后加 --no-open，只启动服务而不自动打开浏览器。
-
-### 练习后没有出现记录
-
-确认练习是在能够加载本地 Skill、写入本地文件并执行脚本的 Codex 环境中完成，并明确说“结束练习”。普通网页聊天无法直接访问电脑上的 Skill 文件或本地复习台。
-
-### 如何更新页面数据
-
-复习台每 8 秒自动读取一次本地存档，也可以点击“刷新记录”。如果服务中断，重新运行 serve 命令即可。
+开发检查：python -m unittest discover -s scripts -p "test_*.py"。旧版每日短句检查：node --test scripts/test_daily_quotes.cjs。

@@ -5,3 +5,7 @@ workbench-data.json
 sessions/
 inbox/
 jpkouyu-data/
+coach-data/
+japanese-immersion-coach-data/
+learner-profile.local.md
+*.session.json
