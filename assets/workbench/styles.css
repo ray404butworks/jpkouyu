@@ -1,7 +1,6 @@
 :root {
 --paper:#f5f3ec; --surface:#fcfbf7; --ink:#253b33; --muted:#5f6c64; --green:#244c40; --green-pale:#e5ebe3; --red:#a1493e; --red-pale:#f4e8e2; --line:#cbd2c6; --gold-pale:#eee7d4;
---body-font:"Yu Gothic","Meiryo","Microsoft YaHei",sans-serif; --book-font:"Yu Mincho","Hiragino Mincho ProN","Noto Serif CJK JP","SimSun",serif;
---space-sm:16px; --space-md:24px; --space-lg:32px; --space-xl:48px;
+--body-font:system-ui,sans-serif; --book-font:ui-serif,serif;
 }
 *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:24px;scrollbar-color:#8c9c90 var(--paper)}
 body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.7 var(--body-font)}
@@ -55,11 +54,11 @@ svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke
 .start-example button:hover{background:#163e31}#copy-status{font-size:12px;display:block;color:var(--muted);margin-top:8px}
 .review-list{display:grid;gap:24px}.review-topic{padding:32px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .review-topic-header{display:flex;justify-content:space-between;align-items:center;gap:16px}.review-topic h2{font-size:19px;overflow-wrap:anywhere}
-.progress{width:100px;height:5px;overflow:hidden;background:var(--green-pale);flex-shrink:0;border-radius:2px}.progress i{display:block;height:100%;background:var(--green)}
+.progress{appearance:none;border:0;width:100px;height:5px;overflow:hidden;background:var(--green-pale);flex-shrink:0;border-radius:2px}.progress::-webkit-progress-bar{background:var(--green-pale)}.progress::-webkit-progress-value{background:var(--green)}.progress::-moz-progress-bar{background:var(--green)}
 .review-meta{color:var(--muted);font-size:12px;margin:8px 0 20px}.review-detail{margin-top:24px}.review-detail h3{margin-bottom:12px;font-size:13px;font-weight:600}
 .target-tags{display:flex;flex-wrap:wrap;gap:10px}.target-tag{padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:15px;max-width:100%;overflow-wrap:anywhere}
 .target-tag small{display:block;font-size:11px;color:var(--muted);margin-top:4px}.target-tag.review{background:var(--red-pale)}.target-tag.developing{background:var(--gold-pale)}.target-tag.unobserved{background:#ededeb}
-.reading{color:var(--muted);font-weight:400}[lang="ja"]{font-family:"Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif}
+.reading{color:var(--muted);font-weight:400}[lang="ja"]{font-family:var(--body-font)}
 .brand-mark,.practice-note>span,.quote-panel blockquote{font-family:var(--book-font)}
 .repair-list{display:grid}.repair-item{padding:16px 0;border-top:1px solid var(--line)}
 .repair-item p{display:grid;grid-template-columns:64px minmax(0,1fr);font-size:14px;line-height:1.8;overflow-wrap:anywhere;margin-bottom:6px}

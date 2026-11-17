@@ -1,0 +1,17 @@
+{
+  "scope": "repository source; excludes interpreter, OS, browser and audit-only tools",
+  "python_functions": 57,
+  "python_callbacks": 5,
+  "missing_chinese_comments": [],
+  "external_python_imports": [],
+  "declared_python_requirements": [],
+  "npm_manifests": [],
+  "font_files": [],
+  "font_file_bytes": 0,
+  "remote_font_or_css_import": false,
+  "unused_css_variables": [],
+  "public_review_required": [
+    "14 literary excerpts: territory, commercial use and attribution",
+    "real human review has not been signed off"
+  ]
+}

@@ -16,19 +16,23 @@ OFFSETS = (1, 3, 7)
 
 
 def require(condition, message):
+    """检查数据约束；不满足时抛出可由命令行统一处理的校验错误。"""
     if not condition:
         raise ValueError(message)
 
 
 def nonempty(value):
+    """判断值是否为非空文本，避免把数字、空白或缺失值当作证据。"""
     return isinstance(value, str) and bool(value.strip())
 
 
 def validate(session):
+    """核对课程结构、文件名、提示等级与真实表现证据，返回已校验记录。"""
     require(isinstance(session, dict), "session must be an object")
     require(type(session.get("version")) is int and session["version"] == 1, "version must be 1")
     sid = session.get("id")
     require(isinstance(sid, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", sid), "invalid session id")
+    require(sid.upper() not in {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1, 10)), *(f"LPT{i}" for i in range(1, 10))}, "reserved Windows filename")
     stamp = datetime.fromisoformat(session["created_at"])
     require(stamp.tzinfo is not None, "created_at needs a timezone")
     require(session.get("mode") in MODES, "invalid mode")
@@ -69,16 +73,19 @@ def validate(session):
 
 
 def read_json(path):
+    """按 UTF-8 读取课程 JSON，兼容带 BOM 的本地导出文件。"""
     with Path(path).open(encoding="utf-8-sig") as handle:
         return json.load(handle)
 
 
 def load_sessions(data_dir):
+    """读取私有目录中的全部课程并逐项校验，按真实时间和标识稳定排序。"""
     records = [validate(read_json(path)) for path in sorted((Path(data_dir) / "coach-sessions").glob("*.json"))]
-    return sorted(records, key=lambda s: (datetime.fromisoformat(s["created_at"]), s["id"]))
+    return sorted(records, key=lambda s: (datetime.fromisoformat(s["created_at"]), s["id"]))  # 回调：按真实课程时间和标识稳定排序。
 
 
 def archive(data_dir, session):
+    """将已校验课程原子发布为独立文件；重复内容幂等，同 ID 冲突拒绝覆盖。"""
     validate(session)
     data_dir = Path(data_dir)
     require(data_dir.is_absolute(), "data-dir must be absolute")
@@ -106,8 +113,9 @@ def archive(data_dir, session):
 
 
 def review_queue(sessions, on):
+    """回放截至指定日期的真实课程证据，计算第 1、3、7 天到期项而不写盘。"""
     history = {}
-    for session in sorted(sessions, key=lambda s: (datetime.fromisoformat(s["created_at"]), s["id"])):
+    for session in sorted(sessions, key=lambda s: (datetime.fromisoformat(s["created_at"]), s["id"])):  # 回调：按真实课程时间和标识稳定排序。
         validate(session)
         day = datetime.fromisoformat(session["created_at"]).date()
         if day > on:
@@ -117,24 +125,25 @@ def review_queue(sessions, on):
                 continue
             key = item["key"]
             if key not in history:
-                history[key] = {"key": key, "anchor": day, "round": 0, "due": day + timedelta(days=1), "last_pass": None}
+                history[key] = {"key": key, "anchor": day, "round": 0, "due": day + timedelta(days=1), "last_success": None}
             row = history[key]
             row.update(expression=item["expression"], kind=item["kind"], state=item["state"])
             if item["is_review"]:
                 if not item["independent_correct"]:
                     row.update(anchor=day, round=0, due=day + timedelta(days=1))
-                elif row["due"] is not None and day >= row["due"] and day != row["last_pass"]:
+                elif row["due"] is not None and day >= row["due"] and day != row["last_success"]:
                     row["round"] += 1
-                    row["last_pass"] = day
+                    row["last_success"] = day
                     row["due"] = None if row["round"] == len(OFFSETS) else max(row["anchor"] + timedelta(days=OFFSETS[row["round"]]), day + timedelta(days=1))
     result = []
     for row in history.values():
         if row["due"] is not None and row["due"] <= on:
             result.append({"key": row["key"], "expression": row["expression"], "kind": row["kind"], "state": row["state"], "due_date": row["due"].isoformat(), "completed_rounds": row["round"]})
-    return sorted(result, key=lambda r: (r["due_date"], r["key"]))
+    return sorted(result, key=lambda r: (r["due_date"], r["key"]))  # 回调：按到期日期和知识标识稳定排序。
 
 
 def main():
+    """解析归档或复习命令，强制绝对数据路径并输出可核验结果。"""
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     save = commands.add_parser("archive")

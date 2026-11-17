@@ -1,0 +1,12 @@
+{
+  "functions": 46,
+  "missing_chinese_comments": [],
+  "dangerous_sinks": [
+    {
+      "file": "assets/workbench/app.js",
+      "line": 83,
+      "property": "innerHTML",
+      "status": "requires data-flow review"
+    }
+  ]
+}

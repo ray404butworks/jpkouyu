@@ -28,28 +28,28 @@ for (const zone of ['Asia/Shanghai','Asia/Tokyo','America/Los_Angeles','America/
   assert.equal(result.status, 0, `${zone}: ${result.stderr}`);
 }
 assert.equal(daily.quotes.length, 14);
-assert.equal(new Set(daily.quotes.map(q=>q.text)).size,14);
+assert.equal(new Set(daily.quotes.map(/* 提取书摘原文并验证目录没有重复句子。 */ q=>q.text)).size,14);
 for (const q of daily.quotes) {
   for (const key of ['id','text','reading','translation','author','work','source','context','prompt']) assert.ok(q[key]);
   assert.ok(q.source.startsWith('https://www.aozora.gr.jp/cards/'));
 }
 // Execute the real page code with a lightweight DOM and controllable LOCAL clock.
 let clock = new Date(2026,8,15,23,59,59).getTime();
-class FakeDate extends Date { constructor(...args) { super(...(args.length ? args : [clock])); } }
+class FakeDate extends Date { constructor/* 无显式时间参数时使用可控测试时钟。 */ (...args) { super(...(args.length ? args : [clock])); } }
 const elements = new Map();
-function element(selector) {
-  if (!elements.has(selector)) elements.set(selector,{textContent:'',innerHTML:'',dataset:{},classList:{toggle(){}},addEventListener(){}});
+/* 创建轻量 DOM 替身用于执行真实页面代码。 */ function element(selector) {
+  if (!elements.has(selector)) elements.set(selector,{textContent:'',innerHTML:'',dataset:{},classList:{toggle/* 测试替身忽略样式切换，保留页面调用契约。 */ (){}},addEventListener/* 测试替身忽略普通按钮监听，不触发真实交互。 */ (){}});
   return elements.get(selector);
 }
 const listeners = {};
 const timers = new Map();
 let timerId = 0;
 const context = vm.createContext({Date:FakeDate,Intl,console,JpDailyQuotes:daily,AbortSignal,
-  document:{querySelector:element,hidden:false,addEventListener(name,fn){(listeners[name]??=[]).push(fn);}},
-  window:{addEventListener(name,fn){(listeners[name]??=[]).push(fn);}},
-  navigator:{clipboard:{writeText:async()=>{}}},
-  fetch:async()=>({ok:true,json:async()=>({sessions:[]})}),
-  setInterval(){},setTimeout(fn,delay){timers.set(++timerId,{fn,delay});return timerId;},clearTimeout(id){timers.delete(id);}
+  document:{querySelector:element,hidden:false,addEventListener/* 记录页面可见性事件，供恢复场景测试触发。 */ (name,fn){(listeners[name]??=[]).push(fn);}},
+  window:{addEventListener/* 记录窗口事件，供休眠恢复测试触发。 */ (name,fn){(listeners[name]??=[]).push(fn);}},
+  navigator:{clipboard:{writeText:/* 模拟剪贴板成功，避免触碰用户真实剪贴板。 */ async()=>{}}},
+  fetch:/* 模拟只读接口成功响应，不访问真实学习记录。 */ async()=>({ok:true,json:/* 返回空的模拟课程汇总。 */ async()=>({sessions:[]})}),
+  setInterval/* 隔离真实周期计时器，防止测试驻留后台。 */ (){},setTimeout/* 记录定时任务与延迟，供测试手动跨越午夜。 */ (fn,delay){timers.set(++timerId,{fn,delay});return timerId;},clearTimeout/* 移除已取消的模拟定时任务。 */ (id){timers.delete(id);}
 });
 vm.runInContext(fs.readFileSync(path.resolve(__dirname,'../assets/workbench/app.js'),'utf8'),context);
 const first = element('#quote-text').textContent;
@@ -61,12 +61,18 @@ assert.notEqual(element('#quote-text').textContent, first);
 assert.equal(element('#quote-date').dateTime,'2026-09-16');
 // Returning from sleep jumps to actual date, not a counter of days spent open.
 clock = new Date(2026,8,20,12).getTime();
-listeners.focus.forEach(fn=>fn());
+listeners.focus.forEach(/* 模拟从休眠恢复，触发焦点检查。 */ fn=>fn());
 assert.equal(element('#quote-date').dateTime,'2026-09-20');
 const sameDay = element('#quote-text').textContent;
-listeners.focus.forEach(fn=>fn());
+listeners.focus.forEach(/* 再次触发同日恢复，验证短句不会漂移。 */ fn=>fn());
 assert.equal(element('#quote-text').textContent,sameDay);
 vm.runInContext(`state = {sessions:[{created_at:'2026-09-15T12:00:00+08:00',topic:{id:'demo',label:'仅供测试的便利店场景'},targets:[{expression:'袋は要りません。',reading:'ふくろはいりません。',status:'developing',support:'intent_hint'}],repairs:[{learner:'袋がください。',natural:'袋をください。',reason_zh:'请求物品用を',natural_reading:'ふくろをください。'}],focus_next:['助词'],next_drill:'换一个场景'}]}; renderReview();`,context);
 assert.ok(element('#review-list').innerHTML.includes('ふくろはいりません。'));
 assert.ok(element('#review-list').innerHTML.includes('请求物品用を'));
+// 危险的场景 ID 不能访问对象原型；用户文字必须始终按纯文本转义。
+vm.runInContext(`state = {sessions:[{created_at:'2026-09-15T12:00:00+08:00',topic:{id:'__proto__',label:'<img src=x onerror=alert(1)>'},targets:[{expression:'<script>alert(1)</script>',status:'needs_review',support:'none'}]}]}; renderReview();`,context);
+assert.ok(element('#review-list').innerHTML.includes('&lt;img'));
+assert.ok(element('#review-list').innerHTML.includes('&lt;script&gt;'));
+assert.ok(!element('#review-list').innerHTML.includes('<script>'));
+assert.ok(!element('#review-list').innerHTML.includes('style="'));
 console.log('PASS: 7 time zones, DST, leap/year boundaries, 14 unique sourced quotes, midnight callback, sleep/focus recovery, same-day stability, populated review rendering.');
