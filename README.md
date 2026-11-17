@@ -81,3 +81,9 @@ python scripts/coach.py due --data-dir $jpData --on 2026-11-17
 本仓库提供可检查的教学规范和可运行的本地记录工具。本地自动检查可验证数据保存、幂等、证据约束和复习日期；不能证明手机语音里的中日切换、原生 Skill 自动调用或 Project 自动找到旧记录。这些仍需在实际客户端体验后验收。
 
 开发检查：python -m unittest discover -s scripts -p "test_*.py"。旧版每日短句检查：node --test scripts/test_daily_quotes.cjs。
+
+## 发布前检查
+
+见 [本次清理与安全审计](docs/release-audit-2026-11-17.md) 和 [第三方组件及资源说明](THIRD_PARTY_NOTICES.md)。每次上线前运行代码、字体、依赖许可和安全检查，再由真人复核；自动扫描通过不等于最终验收。14 条文学书摘按维护者选择保留，其商用授权仍待人工确认。
+
+旧复习台仅支持本机回环地址，只提供课程读取和固定静态资源；/api/preferences 和 /api/health 已删除，不用于公网部署。

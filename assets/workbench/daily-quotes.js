@@ -1,10 +1,10 @@
 /* Original Japanese excerpts: Aozora Bunko. Chinese renderings and reading aids are editorial additions.
  * Texts and source links checked 2026-09-15. Keep the catalog order stable for deterministic daily rotation. */
-(function (root, factory) {
+(/* 按环境导出同一短句模块，供网页和本地测试共同使用。 */ function (root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
   else root.JpDailyQuotes = api;
-})(typeof globalThis === "object" ? globalThis : this, function () {
+})(typeof globalThis === "object" ? globalThis : this, /* 建立固定书摘目录和本地日期轮换工具。 */ function () {
   "use strict";
   const quotes = [
   {
@@ -164,17 +164,17 @@
 ];
   const DAY = 86400000;
   const anchor = Date.UTC(2026, 8, 15) / DAY;
-  function localDateKey(date = new Date()) {
+  /* 提取电脑当地年月日作为稳定日期键。 */ function localDateKey(date = new Date()) {
     return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
   }
-  function getForDate(date = new Date()) {
+  /* 先提取当地日期再按 UTC 日序轮换，避免夏令时误差。 */ function getForDate(date = new Date()) {
     // UTC is used only to count calendar days AFTER extracting the computer's LOCAL Y/M/D.
     // Dividing elapsed local milliseconds would fail across daylight-saving transitions.
     const day = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / DAY;
     const index = ((day - anchor) % quotes.length + quotes.length) % quotes.length;
     return { dateKey: localDateKey(date), index, quote: quotes[index] };
   }
-  function millisecondsToNextDay(date = new Date()) {
+  /* 计算距离下一个当地午夜的等待时间，兼容夏令时长短日。 */ function millisecondsToNextDay(date = new Date()) {
     const next = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     return Math.max(50, next.getTime() - date.getTime() + 50);
   }
